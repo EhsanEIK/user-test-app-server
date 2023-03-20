@@ -44,6 +44,23 @@ const run = async () => {
             const user = await usersDBCollection.findOne(query);
             res.send(user);
         })
+
+        // PUT
+        app.put('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const user = req.body;
+            const updatedUser = {
+                $set: {
+                    userName: user.userName,
+                    email: user.email,
+                    age: user.age
+                }
+            };
+            const result = await usersDBCollection.updateOne(filter, updatedUser, options);
+            res.send(result);
+        })
     }
     finally { }
 }
